@@ -6,20 +6,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 
-import { Schemes } from '../../core/models/enums/constants';
-import { selectColorScheme } from '../../redux/selectors/app-theme.selector';
+import { selectColorScheme } from '../../../redux/selectors/app-theme.selector';
+import { Schemes } from '../../models/enums/constants';
 
 @Component({
-    selector: 'app-access',
+    selector: 'app-no-root',
     standalone: true,
-    imports: [RouterLink, ButtonModule, RippleModule, TranslateModule],
-    templateUrl: './access.component.html',
-    styleUrl: './access.component.scss',
+    imports: [ButtonModule, RouterLink, RippleModule, TranslateModule],
+    templateUrl: './no-direct-trains-found.component.html',
+    styleUrl: './no-direct-trains-found.component.scss',
 })
-export class AccessComponent {
+export class NoDirectTrainsFoundComponent {
     private store = inject(Store);
-
     public colorScheme!: Signal<string>;
+
     constructor() {
         const colorScheme$ = this.store.select(selectColorScheme);
         this.colorScheme = toSignal(colorScheme$, { initialValue: Schemes.LIGHT });
