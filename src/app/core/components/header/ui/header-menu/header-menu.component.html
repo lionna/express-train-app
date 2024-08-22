@@ -1,0 +1,32 @@
+<div class="header-menu">
+    <button
+        class="p-link layout-topbar-button"
+        appCloseAllOverlay
+        (click)="handleOpenMenu()"
+        (clickOutside)="handleCloseMenu()"
+    >
+        <i class="{{ icon }} " [ngClass]="{ 'header-menu__icon': text }"></i>
+        <p class="header-menu__text">
+            {{ text }}
+        </p>
+    </button>
+
+    @if (show) {
+        <ul class="header-menu__content">
+            @for (item of modelMenu; track $index) {
+                @if (item.label) {
+                    <a
+                        class="p-link header-menu__btn"
+                        [routerLink]="item.routerLink"
+                        routerLinkActive="active-route"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        (click)="handleSelectItem(item)"
+                    >
+                        <i class="{{ item.icon }}"></i>
+                        <span>{{ item.label | translate }}</span>
+                    </a>
+                }
+            }
+        </ul>
+    }
+</div>
