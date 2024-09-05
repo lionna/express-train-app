@@ -6,15 +6,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
 import { Subscription } from 'rxjs';
 
-import { Languages } from './core/models/enums/constants';
+import { Languages, LocalStorageFields } from './core/models/enums/constants';
+import { LocalStorageService } from './core/services/local-storage.service';
+import { AppUserActions } from './redux/actions/app-user.actions';
 import { selectDefaultLanguage } from './redux/selectors/app-language.selector';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, ButtonModule, CalendarModule],
+    imports: [RouterOutlet, ButtonModule, CalendarModule, ToastModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
@@ -26,7 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     constructor(
         private config: PrimeNGConfig,
-        private translateService: TranslateService
+        private translateService: TranslateService,
+        private localStorageService: LocalStorageService
     ) {
         const defaultLanguage$ = this.store.select(selectDefaultLanguage);
         this.defaultLanguage = toSignal(defaultLanguage$, { initialValue: Languages.EN });
@@ -36,6 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.translateService.setDefaultLang(this.defaultLanguage());
         this.translateService.use(this.defaultLanguage());
         this.language$ = this.translateService.get('primeng').subscribe((res) => this.config.setTranslation(res));
+        const token = this.localStorageService.getItem<string>(LocalStorageFields.TOKEN);
+        if (token) {
+            this.store.dispatch(AppUserActions.postLoadUserData());
+        }
     }
 
     ngOnDestroy() {
