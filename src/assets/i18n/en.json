@@ -1,13 +1,36 @@
 {
+  "MESSAGES": {
+    "TITLE": {
+      "WARNING": "Warning",
+      "SUCCESS": "Success",
+      "ERROR": "Error"
+    },
+    "CARRIAGES": {
+      "SAVE_SUCCESS": "The carriage saved!",
+      "UPDATE_SUCCESS": "The carriage updated!"
+    },
+    "STATIONS": {
+      "SAVE_SUCCESS": "The station saved!",
+      "UPDATE_SUCCESS": "The station updated!",
+      "DELETE_SUCCESS": "The station deleted!"
+    },
+    "ROUTES": {
+      "SAVE_SUCCESS": "The route saved!",
+      "UPDATE_SUCCESS": "The route updated!",
+      "DELETE_SUCCESS": "The route deleted!"
+    }
+  },
   "ADMIN": {
     "CREATE_BTN": "Create",
     "NAME": "Name",
     "LEFT_SEATS": "Count left seats",
     "RIGHT_SEATS": "Count right seats",
+    "COUNT_SEATS": "Count seats",
     "ROWS": "Count rows",
+    "NO_CARRIAGE": "No carriages found.",
+    "PICTURE": "Picture",
     "CARRIAGE_CREATE_FORM": {
-      "TITLE": "New carriage",
-      "SAVE_BTN": "Save"
+      "TITLE": "New carriage"
     }
   },
   "BUTTONS": {
@@ -15,7 +38,10 @@
     "REMEMBER_ME": "Remember me",
     "REGISTER": "Register",
     "SAVE": "Save",
-    "LOGOUT": "Logout"
+    "CANCEL": "Cancel",
+    "UPDATE": "Update",
+    "LOGOUT": "Logout",
+    "CONFIRM": "Confirm"
   },
   "FIELD": {
     "EMAIL": {
@@ -58,6 +84,62 @@
   "PROFILE_PAGE": {
     "TITLE": "Profile",
     "CHANGE_PASSWORD": "Change Password"
+  },
+  "STATION_PAGE": {
+    "TITLE": "Stations",
+    "CONNECTED_TO": "Connected to:",
+    "DELETE_CONFIRMATION": "Delete Confirmation",
+    "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to delete this station? This action cannot be undone.",
+    "FIELDS": {
+      "CITY_NAME": {
+        "NAME": "City Name",
+        "PLACEHOLDER": "Enter city name",
+        "ERRORS": {
+          "REQUIRED": "City Name is required.",
+          "MIN_LENGTH": "City Name must be at least 2 characters long.",
+          "MAX_LENGTH": "City Name cannot be more than 50 characters.",
+          "COMMON": "Please check the City Name field for errors."
+        }
+      },
+      "LATITUDE": {
+        "NAME": "Latitude",
+        "ERRORS": {
+          "REQUIRED": "Latitude is required.",
+          "MIN_MAX": "Latitude must be between -90 and 90.",
+          "COMMON": "Please check the Latitude field for errors."
+        }
+      },
+      "LONGITUDE": {
+        "NAME": "Longitude",
+        "ERRORS": {
+          "REQUIRED": "Longitude is required.",
+          "MIN_MAX": "Longitude must be between -180 and 180.",
+          "COMMON": "Please check the Longitude field for errors."
+        }
+      },
+      "CONNECTED": {
+        "NAME": "Connected",
+        "PLACEHOLDER": "Select a City"
+      }
+    }
+  },
+  "ROUTE_PAGE": {
+    "TITLE": "Routes",
+    "CITIES": "Cities",
+    "CARRIAGE_TYPES": "Carriage types",
+    "SUB_TITLE": "Route",
+    "DELETE_CONFIRMATION": "Delete Confirmation",
+    "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to delete this route? This action cannot be undone.",
+    "FIELDS": {
+      "STATIONS": {
+        "NAME": "Stations",
+        "PLACEHOLDER": "Select a City"
+      },
+      "CARRIAGES": {
+        "NAME": "Carriages",
+        "PLACEHOLDER": "Select a Carriage"
+      }
+    }
   },
   "LOGIN_PAGE": {
     "WELCOME": "Welcome, to Express Train!",

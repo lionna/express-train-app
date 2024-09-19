@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
@@ -13,6 +14,7 @@ import { MessagesModule } from 'primeng/messages';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 
+import { environment } from '../../../environments/environment';
 import { ConfigComponent } from '../../core/components/config/config.component';
 import { Schemes } from '../../core/models/enums/constants';
 import { Routers } from '../../core/models/enums/routers';
@@ -84,7 +86,7 @@ export class SignupComponent {
 
         this.httpService
             .post<SignUpErrorResponse>({
-                url: '/api/signup',
+                url: environment.apiSignUp,
                 body: {
                     email: login,
                     password,
@@ -97,6 +99,14 @@ export class SignupComponent {
                         // this.handleSignUpError(response.error);
                     } else {
                         console.log('Sign-up successful');
+                    }
+
+                    if (response instanceof HttpErrorResponse) {
+                        return;
+                    }
+
+                    if ('token' in response) {
+                        console.log('Login successful:', response.token);
                     }
                 },
                 error: (error) => {
