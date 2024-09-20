@@ -1,4 +1,7 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import localeEn from '@angular/common/locales/en';
+import localeRu from '@angular/common/locales/ru';
 import {
     ApplicationConfig,
     DEFAULT_CURRENCY_CODE,
@@ -24,12 +27,16 @@ import { AppConfigEffects } from './redux/effects/app-config.effects';
 import { AppLanguageEffects } from './redux/effects/app-language.effects';
 import { AppRoutesEffects } from './redux/effects/app-routes.effects';
 import { AppStationsEffects } from './redux/effects/app-stations.effects';
+import { AppTripEffects } from './redux/effects/app-trip.effects';
 import { AppUserEffects } from './redux/effects/app-user.effects';
 import { metaReducers, reducers } from './redux/reducers';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
+
+registerLocaleData(localeRu, 'ru');
+registerLocaleData(localeEn, 'en');
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -45,7 +52,8 @@ export const appConfig: ApplicationConfig = {
             AppCarriagesEffects,
             AppUserEffects,
             AppStationsEffects,
-            AppRoutesEffects
+            AppRoutesEffects,
+            AppTripEffects
         ),
         provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
         importProvidersFrom(
@@ -53,7 +61,7 @@ export const appConfig: ApplicationConfig = {
                 loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] },
             })
         ),
-        { provide: LOCALE_ID, useValue: 'ru-RU' },
-        { provide: DEFAULT_CURRENCY_CODE, useValue: 'RUB' },
+        { provide: LOCALE_ID, useValue: 'en-US' },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'USD' },
     ],
 };

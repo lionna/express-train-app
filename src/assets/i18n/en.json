@@ -1,4 +1,15 @@
 {
+  "TRIP": {
+    "DEPARTURE": "Departure",
+    "ARRIVAL": "Arrival",
+    "RIDE": "Ride",
+    "ROUTE": "Route",
+    "CARRIAGE": "Carriage",
+    "AVAILABLE_SEATS": "Available seats",
+    "TYPE_CARRIAGE": "Carriage type",
+    "PRICE": "Price",
+    "SEAT": "Seat"
+  },
   "MESSAGES": {
     "TITLE": {
       "WARNING": "Warning",
@@ -33,6 +44,16 @@
       "TITLE": "New carriage"
     }
   },
+  "ORDER": {
+    "FROM": "FROM",
+    "TO": "TO",
+    "DURATION": "Duration",
+    "CARRIAGE": "CARRIAGE",
+    "CAR_NUMBER": "Car number",
+    "SEAT_NUMBER": "Seat number",
+    "PRICE": "Price",
+    "NO_ORDER": "No orders found."
+  },
   "BUTTONS": {
     "SIGN_IN": "Sign In",
     "REMEMBER_ME": "Remember me",
@@ -41,7 +62,9 @@
     "CANCEL": "Cancel",
     "UPDATE": "Update",
     "LOGOUT": "Logout",
-    "CONFIRM": "Confirm"
+    "CONFIRM": "Confirm",
+    "SEARCH": "Search",
+    "ADD": "Add"
   },
   "FIELD": {
     "EMAIL": {
@@ -81,6 +104,19 @@
     "MIN": "Specify a larger number",
     "MAX": "Specify a smaller number"
   },
+  "SEARCH_PAGE": {
+    "FIELDS": {
+      "FROM": {
+        "PLACEHOLDER": "from"
+      },
+      "TO": {
+        "PLACEHOLDER": "to"
+      },
+      "CALENDAR": {
+        "PLACEHOLDER": "Select a date"
+      }
+    }
+  },
   "PROFILE_PAGE": {
     "TITLE": "Profile",
     "CHANGE_PASSWORD": "Change Password"
@@ -119,25 +155,37 @@
       },
       "CONNECTED": {
         "NAME": "Connected",
-        "PLACEHOLDER": "Select a City"
+        "PLACEHOLDER": "Select a City",
+        "ERRORS": {
+          "REQUIRED": "No cities has been selected on the station."
+        }
       }
     }
   },
   "ROUTE_PAGE": {
     "TITLE": "Routes",
-    "CITIES": "Cities",
-    "CARRIAGE_TYPES": "Carriage types",
+    "CITIES": "Cities:",
+    "CARRIAGE_TYPES": "Carriage types:",
     "SUB_TITLE": "Route",
+    "SUB_TITLE_NEW": "NEW Route",
     "DELETE_CONFIRMATION": "Delete Confirmation",
     "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to delete this route? This action cannot be undone.",
     "FIELDS": {
       "STATIONS": {
         "NAME": "Stations",
-        "PLACEHOLDER": "Select a City"
+        "PLACEHOLDER": "Select a City",
+        "ERRORS": {
+          "REQUIRED": "No stations has been selected on the route.",
+          "LESS_THEN_THREE": "There must be a minimum of three station."
+        }
       },
       "CARRIAGES": {
         "NAME": "Carriages",
-        "PLACEHOLDER": "Select a Carriage"
+        "PLACEHOLDER": "Select a Carriage",
+        "ERRORS": {
+          "REQUIRED": "No carriages has been selected on the route.",
+          "LESS_THEN_THREE": "There must be a minimum of three carriages."
+        }
       }
     }
   },

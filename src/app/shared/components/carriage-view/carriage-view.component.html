@@ -1,0 +1,37 @@
+@if (show) {
+    <!-- {{ countSeatsInCarriage }} -->
+    <div #card class="card flex overflow-auto carriage-view" [ngClass]="{ 'carriage-view-hidden': mode === 'picture' }">
+        @if (carriage) {
+            @for (row of getRowsArray(carriage.rows); track $index; let rowIndex = $index) {
+                <div>
+                    <div class="flex flex-column-reverse">
+                        @for (seatIndex of getSeatsArray(carriage.rightSeats); track $index) {
+                            <app-carriage-seat
+                                [index]="getSeatNumber(rowIndex, seatIndex, 'right')"
+                                (selectSeat)="handleSelectSeat($event)"
+                                [status]="handleIsBusySeat(getSeatNumber(rowIndex, seatIndex, 'right'))"
+                            ></app-carriage-seat>
+                        }
+                    </div>
+                    <p>-</p>
+                    <div class="flex flex-column-reverse">
+                        @for (seatIndex of getSeatsArray(carriage.leftSeats); track $index) {
+                            <app-carriage-seat
+                                [index]="getSeatNumber(rowIndex, seatIndex, 'left')"
+                                (selectSeat)="handleSelectSeat($event)"
+                                [status]="handleIsBusySeat(getSeatNumber(rowIndex, seatIndex, 'left'))"
+                            ></app-carriage-seat>
+                        }
+                    </div>
+                </div>
+            }
+        } @else {
+            <app-carriage-view-skeleton class="w-full"></app-carriage-view-skeleton>
+        }
+    </div>
+}
+@if (imageSrc) {
+    <div class="flex justify-content-center">
+        <img [src]="imageSrc" width="50%" height="100%" alt="carriage" />
+    </div>
+}

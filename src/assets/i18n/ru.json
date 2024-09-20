@@ -1,4 +1,15 @@
 {
+  "TRIP": {
+    "DEPARTURE": "Отправление",
+    "ARRIVAL": "Прибытие",
+    "RIDE": "Поездка",
+    "ROUTE": "Маршрут",
+    "CARRIAGE": "Вагон",
+    "AVAILABLE_SEATS": "Доступно мест",
+    "TYPE_CARRIAGE": "Тип вагона",
+    "PRICE": "Цена",
+    "SEAT": "Место"
+  },
   "MESSAGES": {
     "TITLE": {
       "WARNING": "Внимание",
@@ -33,6 +44,16 @@
       "TITLE": "Новый вагон"
     }
   },
+  "ORDER": {
+    "FROM": "Откуда",
+    "TO": "Куда",
+    "DURATION": "Длительность",
+    "CARRIAGE": "Вагон",
+    "CAR_NUMBER": "Номер вагона",
+    "SEAT_NUMBER": "Номер места",
+    "PRICE": "Цена",
+    "NO_ORDER": "Заказы не найдены."
+  },
   "BUTTONS": {
     "SIGN_IN": "Войти",
     "REMEMBER_ME": "Запомнить меня",
@@ -41,7 +62,9 @@
     "CANCEL": "Отменить",
     "UPDATE": "Обновить",
     "LOGOUT": "Выйти",
-    "CONFIRM": "Подвердить"
+    "CONFIRM": "Подвердить",
+    "SEARCH": "Поиск",
+    "ADD": "Добавить"
   },
   "FIELD": {
     "EMAIL": {
@@ -81,6 +104,19 @@
     "MIN": "Укажите большее число",
     "MAX": "Укажите меньшее число"
   },
+  "SEARCH_PAGE": {
+    "FIELDS": {
+      "FROM": {
+        "PLACEHOLDER": "от"
+      },
+      "TO": {
+        "PLACEHOLDER": "до"
+      },
+      "CALENDAR": {
+        "PLACEHOLDER": "Выберите дату"
+      }
+    }
+  },
   "PROFILE_PAGE": {
     "TITLE": "Профиль",
     "CHANGE_PASSWORD": "Изменить пароль"
@@ -119,25 +155,37 @@
       },
       "CONNECTED": {
         "NAME": "Соединенные станции",
-        "PLACEHOLDER": "Выбере город"
+        "PLACEHOLDER": "Выбере город",
+        "ERRORS": {
+          "REQUIRED": "На станции не было выбрано ни одного города."
+        }
       }
     }
   },
   "ROUTE_PAGE": {
     "TITLE": "Пути",
-    "CITIES": "Города",
-    "CARRIAGE_TYPES": "Типы вагонов",
+    "CITIES": "Города:",
+    "CARRIAGE_TYPES": "Типы вагонов:",
     "SUB_TITLE": "Путь",
+    "SUB_TITLE_NEW": "НОВЫЙ Путь",
     "DELETE_CONFIRMATION": "Подтверждение удаления маршрута",
     "DELETE_CONFIRMATION_MESSAGE": "Вы уверены, что хотите удалить этот маршрут? Это действие необратимо.",
     "FIELDS": {
       "STATIONS": {
         "NAME": "Станции",
-        "PLACEHOLDER": "Выберете станцию"
+        "PLACEHOLDER": "Выберете станцию",
+        "ERRORS": {
+          "REQUIRED": "Ни одна станция не была выбрана на пути.",
+          "LESS_THEN_THREE": "Должно быть не менее трех станций."
+        }
       },
       "CARRIAGES": {
         "NAME": "Вагоны",
-        "PLACEHOLDER": "Выберете вагон"
+        "PLACEHOLDER": "Выберете вагон",
+        "ERRORS": {
+          "REQUIRED": "Ни один вагон не был выбран на пути.",
+          "LESS_THEN_THREE": "Должно быть не менее трех вагонов."
+        }
       }
     }
   },
