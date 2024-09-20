@@ -8,6 +8,12 @@ export const environment = {
     apiSignUp: '/api/signup',
     apiProfile: '/api/profile',
     apiProfilePassword: '/api/profile/password',
+    apiUrlGetRideInformation: '/api/search/',
+    apiUrlPostOrder: '/api/order',
     apiUrlStation: '/api/station',
     apiUrlRoute: '/api/route',
+    apiUrlSearch: '/api/search',
+    apiOrder: '/api/order',
+    apiUsers: '/api/users',
+    apiDeleteOrder: '/api/order/{orderId}',
 };
