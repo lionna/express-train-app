@@ -1,0 +1,27 @@
+:host ::ng-deep .seat {
+    .p-button {
+        height: 10px;
+        width: 10px;
+        font-size: 50%;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.carriage-view {
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: #f0f2f5;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: #6a7d9b;
+    }
+}
