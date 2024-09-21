@@ -1,0 +1,152 @@
+<div class="flex justify-content-between align-items-left mb-2">
+    <div [formGroup]="form">
+        @if (index === 0) {
+            <b> {{ 'RIDE_PAGE.FIELDS.DEPARTURE.NAME' | translate }}:</b>
+            @if (editTimeIndex === index && selectedRideId === schedule.rideId) {
+                <p-calendar
+                    inputId="departure"
+                    dataType="string"
+                    dateFormat="yy-mm-dd"
+                    timeFormat="hh:mm"
+                    [showTime]="true"
+                    [formControlName]="fields.DEPARTURE"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    class="ng-dirty w-full"
+                    styleClass="w-full"
+                    placeholder="{{ 'RIDE_PAGE.FIELDS.DEPARTURE.PLACEHOLDER' | translate }}"
+                    required
+                />
+                @if (form.get(fields.DEPARTURE); as rows) {
+                    @if (!rows.pristine) {
+                        @for (error of handleDepartureErrorMessages(rows.errors); track $index) {
+                            <small class="p-error block mt-2">
+                                {{ error | translate }}
+                            </small>
+                        }
+                    }
+                }
+            } @else {
+                <span>
+                    {{ schedule.segments[index].time[0] | date: 'yyyy-MM-dd h:mm a' }}
+                </span>
+            }
+        } @else if (index > 0 && index < schedule.segments.length) {
+            <b>{{ 'RIDE_PAGE.FIELDS.ARRIVAL.NAME' | translate }}:</b>
+            @if (editTimeIndex === index && selectedRideId === schedule.rideId) {
+                <p-calendar
+                    inputId="arrival"
+                    dataType="string"
+                    dateFormat="yy-mm-dd"
+                    timeFormat="hh:mm"
+                    [showTime]="true"
+                    [formControlName]="fields.ARRIVAL"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    class="ng-dirty w-full"
+                    styleClass="w-full"
+                    placeholder="{{ 'RIDE_PAGE.FIELDS.ARRIVAL.PLACEHOLDER' | translate }}"
+                    required
+                />
+                @if (form.get(fields.ARRIVAL); as rows) {
+                    @if (!rows.pristine) {
+                        @for (error of handleArrivalErrorMessages(rows.errors); track $index) {
+                            <small class="p-error block mt-2">
+                                {{ error | translate }}
+                            </small>
+                        }
+                    }
+                }
+            } @else {
+                <span>
+                    {{ schedule.segments[index - 1].time[1] | date: 'yyyy-MM-dd h:mm a' }}
+                </span>
+            }
+
+            <br />
+            <b>{{ 'RIDE_PAGE.FIELDS.DEPARTURE.NAME' | translate }}:</b>
+            @if (editTimeIndex === index && selectedRideId === schedule.rideId) {
+                <p-calendar
+                    inputId="departure"
+                    dataType="string"
+                    dateFormat="yy-mm-dd"
+                    timeFormat="hh:mm"
+                    [showTime]="true"
+                    [formControlName]="fields.DEPARTURE"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    class="ng-dirty w-full"
+                    styleClass="w-full"
+                    placeholder="{{ 'RIDE_PAGE.FIELDS.DEPARTURE.PLACEHOLDER' | translate }}"
+                    required
+                />
+                @if (form.get(fields.DEPARTURE); as rows) {
+                    @if (!rows.pristine) {
+                        @for (error of handleDepartureErrorMessages(rows.errors); track $index) {
+                            <small class="p-error block mt-2">
+                                {{ error | translate }}
+                            </small>
+                        }
+                    }
+                }
+            } @else {
+                <span>
+                    {{ schedule.segments[index].time[0] | date: 'yyyy-MM-dd h:mm a' }}
+                </span>
+            }
+        } @else if (index === schedule.segments.length) {
+            <b>{{ 'RIDE_PAGE.FIELDS.ARRIVAL.NAME' | translate }}:</b>
+
+            @if (editTimeIndex === index && selectedRideId === schedule.rideId) {
+                <p-calendar
+                    inputId="arrival"
+                    dataType="string"
+                    dateFormat="yy-mm-dd"
+                    timeFormat="hh:mm"
+                    [showTime]="true"
+                    [formControlName]="fields.ARRIVAL"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    class="ng-dirty w-full"
+                    styleClass="w-full"
+                    placeholder="{{ 'RIDE_PAGE.FIELDS.ARRIVAL.PLACEHOLDER' | translate }}"
+                    required
+                ></p-calendar>
+                @if (form.get(fields.ARRIVAL); as rows) {
+                    @if (!rows.pristine) {
+                        @for (error of handleArrivalErrorMessages(rows.errors); track $index) {
+                            <small class="p-error block mt-2">
+                                {{ error | translate }}
+                            </small>
+                        }
+                    }
+                }
+            } @else {
+                <span> {{ schedule.segments[index - 1].time[1] | date: 'yyyy-MM-dd h:mm a' }}</span>
+            }
+        }
+    </div>
+    <div class="ml-2 mr-5">
+        @if (editTimeIndex !== index || selectedRideId !== schedule.rideId) {
+            <p-button
+                icon="pi pi-pencil"
+                (click)="onEditTimes()"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+            ></p-button>
+        }
+        @if (editTimeIndex === index && selectedRideId === schedule.rideId) {
+            <p-button class="mb-2 ml-2" icon="pi pi-save" (click)="onSaveTimes()" [rounded]="true"></p-button>
+            <p-button
+                class="mb-2 ml-2"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="onCancelEdit()"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+            ></p-button>
+        }
+    </div>
+</div>
