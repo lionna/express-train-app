@@ -1,1 +1,41 @@
-<p>route-info works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="text-center font-medium mb-2">
+            <div>
+                <p-button
+                    label="{{ 'BUTTONS.BACK' | translate }}"
+                    class="md:col-1 mr-2"
+                    icon="pi pi-angle-left"
+                    [routerLink]="[routesLink]"
+                    [rounded]="true"
+                    [text]="true"
+                    [raised]="true"
+                />
+                <span class="text-900 text-4xl">{{ 'RIDE_PAGE.SUB_TITLE' | translate }} {{ routeIdParams }}</span>
+                <p-button
+                    label="{{ 'BUTTONS.ADD' | translate }}"
+                    class="md:col-1 ml-2"
+                    severity="success"
+                    icon="pi pi-plus"
+                    [rounded]="true"
+                    [text]="true"
+                    [raised]="true"
+                    [disabled]="showForm()"
+                    (onClick)="handleCreateRoute()"
+                />
+            </div>
+        </div>
+    </div>
+    @if (showForm()) {
+        <div class="col-12">
+            <app-ride-create-form
+                [carriages]="carriages()"
+                [rides]="rides()"
+                [routeId]="routeIdParams"
+            ></app-ride-create-form>
+        </div>
+    }
+    <div class="col-12">
+        <app-ride-table [carriages]="carriages()" [rides]="rides()" [routeId]="routeIdParams"></app-ride-table>
+    </div>
+</div>

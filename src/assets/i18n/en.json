@@ -8,7 +8,10 @@
     "AVAILABLE_SEATS": "Available seats",
     "TYPE_CARRIAGE": "Carriage type",
     "PRICE": "Price",
-    "SEAT": "Seat"
+    "SEAT": "Seat",
+    "FIRST_STATION": "first station",
+    "LAST_STATION": "last station",
+    "INFO_ABOUT_TRIP": "Info about trip"
   },
   "MESSAGES": {
     "TITLE": {
@@ -17,18 +20,30 @@
       "ERROR": "Error"
     },
     "CARRIAGES": {
-      "SAVE_SUCCESS": "The carriage saved!",
-      "UPDATE_SUCCESS": "The carriage updated!"
+      "SAVE_SUCCESS": "The carriage has been saved!",
+      "UPDATE_SUCCESS": "The carriage has been updated!"
     },
     "STATIONS": {
-      "SAVE_SUCCESS": "The station saved!",
-      "UPDATE_SUCCESS": "The station updated!",
-      "DELETE_SUCCESS": "The station deleted!"
+      "SAVE_SUCCESS": "The station has been saved!",
+      "UPDATE_SUCCESS": "The station has been updated!",
+      "DELETE_SUCCESS": "The station has been deleted!",
+      "DELETE_STATION_IN_ACTIVE_RIDE": "Cannot delete station with active rides"
     },
     "ROUTES": {
-      "SAVE_SUCCESS": "The route saved!",
-      "UPDATE_SUCCESS": "The route updated!",
-      "DELETE_SUCCESS": "The route deleted!"
+      "SAVE_SUCCESS": "The route has been saved!",
+      "UPDATE_SUCCESS": "The route has been updated!",
+      "DELETE_SUCCESS": "The route has been deleted!"
+    },
+    "SCHEDULES": {
+      "SAVE_SUCCESS": "The schedule has been saved!",
+      "UPDATE_SUCCESS": "The schedule has been updated!",
+      "DELETE_SUCCESS": "The schedule has been deleted!"
+    },
+    "ORDERS": {
+      "CANCEL_SUCCESS": "The order has been canceled!"
+    },
+    "TRIP": {
+      "BOOK_SUCCESS": "The seat has been booked!"
     }
   },
   "ADMIN": {
@@ -39,24 +54,32 @@
     "COUNT_SEATS": "Count seats",
     "ROWS": "Count rows",
     "NO_CARRIAGE": "No carriages found.",
+    "NO_RIDE": "No ride found. To add a schedule, use the add button on the top panel.",
     "PICTURE": "Picture",
     "CARRIAGE_CREATE_FORM": {
       "TITLE": "New carriage"
     }
   },
   "ORDER": {
-    "FROM": "FROM",
-    "TO": "TO",
+    "FROM_STATION": "Start trip station",
+    "TO_STATION": "End trip station",
+    "FROM_TIME": "Start trip time",
+    "TO_TIME": "End trip time",
     "DURATION": "Duration",
-    "CARRIAGE": "CARRIAGE",
+    "CARRIAGE_TYPE": "Carriage type",
     "CAR_NUMBER": "Car number",
     "SEAT_NUMBER": "Seat number",
     "PRICE": "Price",
-    "NO_ORDER": "No orders found."
+    "NO_ORDER": "No orders found.",
+    "STATUS": "Status",
+    "USER_EMAIL": "Email",
+    "ORDER_ID": "Order Id",
+    "DELETE_CONFIRMATION": "Cancel order",
+    "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to cancel this order? This action cannot be undone.",
+    "DELETE_CONFIRMATION_MESSAGE_ADDITIONAL": "This order is for the user"
   },
   "BUTTONS": {
     "SIGN_IN": "Sign In",
-    "REMEMBER_ME": "Remember me",
     "REGISTER": "Register",
     "SAVE": "Save",
     "CANCEL": "Cancel",
@@ -64,7 +87,12 @@
     "LOGOUT": "Logout",
     "CONFIRM": "Confirm",
     "SEARCH": "Search",
-    "ADD": "Add"
+    "ADD": "Add",
+    "ASSIGN_RIDE": "Assign ride",
+    "BOOK_SEAT": "Book seat",
+    "CLEAR": "Clear",
+    "OPEN": "Open",
+    "BACK": "Back"
   },
   "FIELD": {
     "EMAIL": {
@@ -89,8 +117,8 @@
     }
   },
   "ERRORS": {
-    "REQUIRED": "This field is required.",
-    "INVALID_EMAIL": "Please enter a valid email address.",
+    "REQUIRED": "Required",
+    "INVALID_EMAIL": "Incorrect email",
     "PASSWORD_STRONG": "Your password isn't strong enough.",
     "PASSWORD_UPPER": "Password must contain uppercase letters (A-Z).",
     "PASSWORD_LOWER": "Password must contain lowercase letters (a-z).",
@@ -102,18 +130,27 @@
     "NAME_MIN_LENGTH": "Name must be at least 2 characters long.",
     "NAME_MAX_LENGTH": "The name must not exceed 30 characters.",
     "MIN": "Specify a larger number",
-    "MAX": "Specify a smaller number"
+    "MAX": "Specify a smaller number",
+    "USER_NOT_FOUND": "Incorrect email or password",
+    "ACCOUNT_ALREADY_EXISTS": "Account with this email already exists"
   },
   "SEARCH_PAGE": {
     "FIELDS": {
       "FROM": {
-        "PLACEHOLDER": "from"
+        "PLACEHOLDER": "From"
       },
       "TO": {
-        "PLACEHOLDER": "to"
+        "PLACEHOLDER": "To"
       },
       "CALENDAR": {
-        "PLACEHOLDER": "Select a date"
+        "PLACEHOLDER1": "Date",
+        "PLACEHOLDER2": "Time"
+      },
+      "CARRIAGE_TYPE": {
+        "NAME": "Carriage type"
+      },
+      "SEATS": {
+        "NAME": "seats"
       }
     }
   },
@@ -157,7 +194,7 @@
         "NAME": "Connected",
         "PLACEHOLDER": "Select a City",
         "ERRORS": {
-          "REQUIRED": "No cities has been selected on the station."
+          "REQUIRED": "No cities have been selected for the station."
         }
       }
     }
@@ -175,52 +212,97 @@
         "NAME": "Stations",
         "PLACEHOLDER": "Select a City",
         "ERRORS": {
-          "REQUIRED": "No stations has been selected on the route.",
-          "LESS_THEN_THREE": "There must be a minimum of three station."
+          "REQUIRED": "No stations have been selected for the route.",
+          "LESS_THAN_THREE": "There must be a minimum of three stations."
         }
       },
       "CARRIAGES": {
         "NAME": "Carriages",
         "PLACEHOLDER": "Select a Carriage",
         "ERRORS": {
-          "REQUIRED": "No carriages has been selected on the route.",
-          "LESS_THEN_THREE": "There must be a minimum of three carriages."
+          "REQUIRED": "No carriages have been selected for the route.",
+          "LESS_THAN_THREE": "There must be a minimum of three carriages."
         }
       }
     }
   },
+  "RIDE_PAGE": {
+    "TITLE": "Ride",
+    "SUB_TITLE": "Route",
+    "NEW_ITEM": "New ride",
+    "FIELDS": {
+      "ARRIVAL": {
+        "NAME": "Arrival",
+        "PLACEHOLDER": "Enter the time of arrival",
+        "ERRORS": {
+          "REQUIRED": "Arrival time is required"
+        }
+      },
+      "DEPARTURE": {
+        "NAME": "Departure",
+        "PLACEHOLDER": "Enter the time of departure",
+        "ERRORS": {
+          "REQUIRED": "Departure time is required"
+        }
+      },
+      "PRICE": {
+        "NAME": "Price",
+        "PLACEHOLDER": "Enter a price",
+        "ERRORS": {
+          "REQUIRED": "Price is required",
+          "MIN": "The minimum price is 1",
+          "MAX": "The maximum price is 9999"
+        }
+      }
+    },
+    "DELETE_CONFIRMATION": "Delete Confirmation",
+    "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to delete ride? This action cannot be undone."
+  },
+  "ADMIN_PAGE": {
+    "HEADER_STATIONS": "Stations Page",
+    "HEADER_ROUTES": "Routes Page",
+    "HEADER_CARRIAGES": "Carriages page",
+    "TEXT_STATIONS": "The page allows the manager to manage train stations, which are key points where trains stop for passengers. Stations are interconnected by railway tracks, enabling the trains to travel between them efficiently. Each station must have its own unique geographical coordinates, and only one station is allowed per city to avoid confusion and overlap. Proper management of stations is crucial for maintaining the network's overall functionality.",
+    "TEXT_ROUTES": "The Routes page enables the manager to create and manage unique train routes by combining stations with specific carriage types. Each route defines the movement of the train between different cities, detailing the sequence and quantity of carriages used. However, the route itself does not specify details like ticket prices or travel times, which are managed separately. The careful organization of routes ensures optimized connectivity across the network.",
+    "TEXT_CARRIAGES": "The Carriage page allows the manager to create and configure different types of train carriages. Each train is composed of various carriages, and managers can design these types to suit different routes and service needs. Carriages can range from standard passenger cars to luxury compartments, or even specialized cargo units. Proper configuration of carriages contributes to the flexibility and adaptability of the train services offered."
+  },
   "LOGIN_PAGE": {
-    "WELCOME": "Welcome, to Express Train!",
+    "WELCOME": "Welcome to Express Train!",
     "SIGN_IN_CONTINUE": "Sign in to continue",
     "EMAIL": "Email",
     "EMAIL_PLACEHOLDER": "Email address",
     "PASSWORD": "Password",
     "PASSWORD_PLACEHOLDER": "Password",
-    "REMEMBER_ME": "Remember me",
-    "FORGOT_PASSWORD": "Forgot password?",
+    "FORGOT_PASSWORD": "Forgot your password?",
     "SIGN_IN": "Sign In"
   },
   "REGISTER_PAGE": {
-    "WELCOME": "Welcome, to Express Train!",
+    "WELCOME": "Welcome to Express Train!",
     "SIGN_UP_CONTINUE": "Sign up to continue"
   },
   "NO_DIRECT_TRAINS_FOUND": {
     "TITLE": "No direct trains found",
     "MESSAGE": "No seats on direct trains are available right now, but there is always hope. Try again later or travel with a transfer.",
-    "GO_TO_DASHBOARD": "Go to Dashboard"
+    "GO_TO_DASHBOARD": "Go to home page"
+  },
+  "NO_ORDERS": {
+    "TITLE": "No orders yet",
+    "MESSAGE": "You can make order on home page",
+    "GO_TO_DASHBOARD": "Go to home page"
   },
   "ACCESS": {
     "TITLE": "Access Denied",
-    "MESSAGE": "You do not have the necessary permisions. Please contact admins.",
-    "GO_TO_DASHBOARD": "Go to Dashboard"
+    "MESSAGE": "You do not have the necessary permissions. Please contact admins.",
+    "GO_TO_DASHBOARD": "Go to home page"
   },
   "NOT_FOUND": {
-    "TITLE": "Error Occured",
+    "TITLE": "Error Occurred",
     "MESSAGE": "Requested resource is not available.",
-    "GO_TO_DASHBOARD": "Go to Dashboard"
+    "GO_TO_DASHBOARD": "Go to home page"
   },
   "GENERAL": {
     "SIDEBAR": {
+      "SEARCH": "Search",
       "HOME": "Home",
       "TRIP": "Trip",
       "USER_PROFILE": "User profile",
@@ -248,10 +330,10 @@
   "primeng": {
     "startsWith": "Starts with",
     "contains": "Contains",
-    "notContains": "Not contains",
+    "notContains": "Does not contain",
     "endsWith": "Ends with",
     "equals": "Equals",
-    "notEquals": "Not equals",
+    "notEquals": "Does not equal",
     "noFilter": "No Filter",
     "filter": "Filter",
     "lt": "Less than",
@@ -338,11 +420,11 @@
       "previous": "Previous",
       "next": "Next",
       "navigation": "Navigation",
-      "scrollTop": "Scroll Top",
-      "moveTop": "Move Top",
+      "scrollTop": "Scroll to Top",
+      "moveTop": "Move to Top",
       "moveUp": "Move Up",
       "moveDown": "Move Down",
-      "moveBottom": "Move Bottom",
+      "moveBottom": "Move to Bottom",
       "moveToTarget": "Move to Target",
       "moveToSource": "Move to Source",
       "moveAllToTarget": "Move All to Target",

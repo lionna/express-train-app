@@ -27,11 +27,17 @@ export const selectTripInfo = createSelector(
             if (trip && fromTo.from && fromTo.to) {
                 const indexDeparture = trip.path.indexOf(fromTo.from);
                 const indexArrival = trip.path.indexOf(fromTo.to);
+
+                if (indexArrival === -1 || indexDeparture === -1) {
+                    return Error('Trip not found');
+                }
+                const from = stations.find((station: Station) => station.id === fromTo.from)?.city ?? '';
+                const to = stations.find((station: Station) => station.id === fromTo.to)?.city ?? '';
                 const tripInfo: TripInfo = {
-                    departureTime: trip.schedule.segments[indexDeparture].time[0],
-                    arrivalTime: trip.schedule.segments[indexArrival - 1].time[1],
-                    from: stations[fromTo.from].city,
-                    to: stations[fromTo.to].city,
+                    departureTime: trip.schedule.segments[indexDeparture]?.time[0] ?? '',
+                    arrivalTime: trip.schedule.segments[indexArrival - 1]?.time[1] ?? '',
+                    from,
+                    to,
                     rideId: trip.rideId,
                 };
                 return tripInfo;
@@ -49,35 +55,35 @@ export const selectTripSchedule = createSelector(
         if (stations.length !== 0) {
             if (trip && fromTo.from && fromTo.to) {
                 const tripSchedule: TripSchedule = {
-                    rideId: trip.rideId,
+                    routeId: trip.routeId,
                     stationTripInfo: trip.path.map((station: number, index: number) => {
                         const timeTo = trip.schedule.segments[index - 1]?.time[1] ?? '';
                         const timeFrom = trip.schedule.segments[index]?.time[0] ?? '';
                         const diff: number = Math.abs(new Date(timeTo).getTime() - new Date(timeFrom).getTime());
                         const time = Math.floor(diff / (1000 * 60)) ?? NaN;
+                        const city = stations.find((s) => s.id === station)?.city ?? '';
 
                         if (index === 0) {
                             return {
-                                city: stations[station]?.city ?? '',
+                                city,
                                 timeFrom,
                                 timeTo: '',
-                                timeStop: 'first station',
+                                timeStop: 'TRIP.FIRST_STATION',
                                 cityFrom: station === fromTo.from,
                                 cityTo: station === fromTo.to,
                             };
                         }
 
                         return {
-                            city: stations[station]?.city ?? '',
+                            city,
                             timeFrom,
                             timeTo,
-                            timeStop: Number.isNaN(time) ? 'last station' : `${time}m`,
+                            timeStop: Number.isNaN(time) ? 'TRIP.LAST_STATION' : `${time}m`,
                             cityFrom: station === fromTo.from,
                             cityTo: station === fromTo.to,
                         };
                     }),
                 };
-                console.log(tripSchedule);
                 return tripSchedule;
             }
         }
@@ -107,9 +113,11 @@ export const selectBusySeats = createSelector(
                     const busySeats = trip.schedule.segments[index]?.occupiedSeats;
                     if (occupiedSeatsStartAdded) {
                         if (!occupiedSeatsEndAdded) {
-                            busySeats.forEach((seat: number) => {
-                                occupiedSeats.push(seat);
-                            });
+                            if (busySeats !== undefined) {
+                                busySeats.forEach((seat: number) => {
+                                    occupiedSeats.push(seat);
+                                });
+                            }
                         }
                     }
                 });
@@ -142,13 +150,15 @@ export const selectPrice = createSelector(
                     const busySeats = trip.schedule.segments[index]?.price;
                     if (carriagesPriceStartAdded) {
                         if (!carriagesPriceEndAdded) {
-                            Object.keys(busySeats).forEach((seat: string) => {
-                                if (carriagesPrice[seat]) {
-                                    carriagesPrice[seat] += busySeats[seat];
-                                } else {
-                                    carriagesPrice[seat] = busySeats[seat];
-                                }
-                            });
+                            if (busySeats !== undefined) {
+                                Object.keys(busySeats).forEach((seat: string) => {
+                                    if (carriagesPrice[seat]) {
+                                        carriagesPrice[seat] += busySeats[seat];
+                                    } else {
+                                        carriagesPrice[seat] = busySeats[seat];
+                                    }
+                                });
+                            }
                         }
                     }
                 });

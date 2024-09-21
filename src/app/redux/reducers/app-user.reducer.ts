@@ -36,9 +36,12 @@ export const appUserReducer = createReducer(
         })
     ),
     on(
-        AppUserActions.logOutSuccess,
+        AppUserActions.logOutDeleteToken,
         (): AppUserState => ({
-            ...initialState,
+            [AppUserFields.USER_EMAIL]: null,
+            [AppUserFields.USER_NAME]: null,
+            [AppUserFields.USER_TOKEN]: null,
+            [AppUserFields.USER_ROLE]: null,
         })
     )
 );

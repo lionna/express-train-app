@@ -1,17 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    inject,
-    Input,
-    Signal,
-    ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import html2canvas from 'html2canvas';
 import { SkeletonModule } from 'primeng/skeleton';
 
 import { Carriage } from '../../../core/models';
@@ -29,15 +19,14 @@ import { CarriageViewSkeletonComponent } from '../carriage-view-skeleton/carriag
     templateUrl: './carriage-view.component.html',
     styleUrl: './carriage-view.component.scss',
 })
-export class CarriageViewComponent implements AfterViewInit {
+export class CarriageViewComponent {
     private store = inject(Store);
 
     @Input() public numberOfCarriage!: number | null;
     @Input() public carriage!: Carriage | null;
-    @Input() public mode: 'picture' | null = null;
+    @Input() public mode: 'create' | null = null;
     @Input() public startIndexSeats: number = 0;
     @Input() public price: number = 0;
-    @ViewChild('card') content!: ElementRef;
 
     public selectedSeat!: Signal<SeatBooking | null>;
     public busySeats!: Signal<number[]>;
@@ -79,18 +68,8 @@ export class CarriageViewComponent implements AfterViewInit {
         return 0;
     }
 
-    public ngAfterViewInit(): void {
-        if (this.mode === 'picture')
-            html2canvas(this.content.nativeElement).then((canvas) => {
-                this.imageSrc = canvas.toDataURL('image/png');
-                this.show = false;
-            });
-        this.cdr.markForCheck();
-    }
-
     public handleSelectSeat(seatInCarriage: number): void {
         const seatInTrain = seatInCarriage + this.startIndexSeats;
-        console.log(seatInTrain);
         if (this.numberOfCarriage) {
             this.store.dispatch(
                 AppTripActions.selectSeat({
@@ -104,6 +83,10 @@ export class CarriageViewComponent implements AfterViewInit {
     }
 
     public handleIsBusySeat(index: number): string {
+        if (this.mode === 'create') {
+            return SeatStatus.AVAILABLE;
+        }
+
         const indexSeatInTrain = index + this.startIndexSeats;
 
         if (this.selectedSeat()?.seatInTrain === indexSeatInTrain) {
