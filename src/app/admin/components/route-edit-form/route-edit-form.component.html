@@ -1,8 +1,8 @@
 <div class="edit-container">
     <form class="card mb-2" [formGroup]="routeForm" (ngSubmit)="onSaveRoute()">
         <div class="w-full">
-            @if (routeForm.get(fields.ID)?.value !== null && routeForm.get(fields.ID)?.value > 0) {
-                <p-tag value="{{ 'ROUTE_PAGE.SUB_TITLE' | translate }}{{ routeForm.get(fields.ID)?.value }}" />
+            @if (id !== null && id > 0) {
+                <p-tag value="{{ 'ROUTE_PAGE.SUB_TITLE' | translate }}{{ id }}" />
             } @else {
                 <p-tag severity="warning" value="{{ 'ROUTE_PAGE.SUB_TITLE_NEW' | translate }}" />
             }
@@ -27,7 +27,7 @@
                                 formControlName="city"
                                 optionLabel="city"
                                 optionValue="city"
-                                [options]="stations"
+                                [options]="getStations($index)"
                                 placeholder="{{ 'ROUTE_PAGE.FIELDS.STATIONS.PLACEHOLDER' | translate }}"
                                 class="ng-dirty w-full"
                                 styleClass="w-full"
@@ -35,8 +35,14 @@
                                 [filter]="true"
                                 filterBy="city"
                                 [required]="true"
+                                [disabled]="$index !== path.length - 1 && path.controls[$index].valid"
+                                (onChange)="
+                                    path.controls[$index].valid && $index === path.length - 1 ? addStation() : null
+                                "
                             />
+
                             <p-button
+                                [disabled]="$index !== path.length - 1"
                                 severity="danger"
                                 icon="pi pi-trash"
                                 [rounded]="true"
@@ -70,7 +76,7 @@
                             <ng-template pTemplate>
                                 <span class="pi pi-exclamation-circle"></span>
                                 <div class="ml-2 align-items-center">
-                                    {{ 'ROUTE_PAGE.FIELDS.STATIONS.ERRORS.LESS_THEN_THREE' | translate }}
+                                    {{ 'ROUTE_PAGE.FIELDS.STATIONS.ERRORS.LESS_THAN_THREE' | translate }}
                                     <p-button
                                         class="ml-2"
                                         label="{{ 'BUTTONS.ADD' | translate }}"
@@ -108,7 +114,7 @@
                                 formControlName="name"
                                 optionLabel="name"
                                 optionValue="name"
-                                [options]="carriageList"
+                                [options]="getCarriages()"
                                 placeholder="{{ 'ROUTE_PAGE.FIELDS.CARRIAGES.PLACEHOLDER' | translate }}"
                                 class="ng-dirty w-full"
                                 styleClass="w-full"
@@ -116,6 +122,12 @@
                                 [filter]="true"
                                 filterBy="name"
                                 [required]="true"
+                                [disabled]="$index !== carriages.length - 1 && carriages.controls[$index].valid"
+                                (onChange)="
+                                    carriages.controls[$index].valid && $index === carriages.length - 1
+                                        ? addCarriage()
+                                        : null
+                                "
                             />
 
                             <p-button
@@ -153,7 +165,7 @@
                             <ng-template pTemplate>
                                 <span class="pi pi-exclamation-circle"></span>
                                 <div class="ml-2 align-items-center">
-                                    {{ 'ROUTE_PAGE.FIELDS.CARRIAGES.ERRORS.LESS_THEN_THREE' | translate }}
+                                    {{ 'ROUTE_PAGE.FIELDS.CARRIAGES.ERRORS.LESS_THAN_THREE' | translate }}
                                     <p-button
                                         class="ml-2"
                                         label="{{ 'BUTTONS.ADD' | translate }}"

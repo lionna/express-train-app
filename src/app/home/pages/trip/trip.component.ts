@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AccordionModule } from 'primeng/accordion';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
+import { tap } from 'rxjs';
 
 import { Routers } from '../../../core/models/enums/routers';
+import { UserRole } from '../../../core/models/user/user.model';
 import { AppTripActions } from '../../../redux/actions/app-trip.actions';
 import { selectSelectedSeat, selectTripInfo, selectTripSchedule } from '../../../redux/selectors/app-trip.selector';
+import { selectUserRole } from '../../../redux/selectors/app-user.selector';
 import { TripInfoComponent, TripRoutePopupComponent, TripSeatChoiceComponent } from '../../components';
 import { SeatBooking, TripInfo } from '../../models';
 import { CarriagesInTrain } from '../../models/trip-carriage.model';
@@ -27,6 +32,8 @@ import { TripSchedule } from '../../models/trip-schedule.model';
         TripSeatChoiceComponent,
         RouterLink,
         TranslateModule,
+        AccordionModule,
+        BadgeModule,
     ],
     templateUrl: './trip.component.html',
     styleUrl: './trip.component.scss',
@@ -38,10 +45,11 @@ export class TripComponent implements OnInit {
         return Routers;
     }
 
-    public tripInfo!: Signal<TripInfo | null>;
+    public tripInfo!: Signal<TripInfo | Error | null>;
     public tripSchedule!: Signal<TripSchedule | null>;
     public tripCarriagesInfo!: Signal<CarriagesInTrain | null>;
     public selectedSeat!: Signal<SeatBooking | null>;
+    public userRole!: Signal<UserRole | null>;
 
     public showRouteModal: boolean = false;
 
@@ -52,8 +60,22 @@ export class TripComponent implements OnInit {
     public occupiedSeatsStartAdded: boolean = false;
     public occupiedSeatsEndAdded: boolean = false;
 
-    constructor(private route: ActivatedRoute) {
-        const tripInfo$ = this.store.select(selectTripInfo);
+    public get headerAccordion(): string {
+        return this.translate.instant('TRIP.INFO_ABOUT_TRIP');
+    }
+
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private translate: TranslateService
+    ) {
+        const tripInfo$ = this.store.select(selectTripInfo).pipe(
+            tap((response) => {
+                if (response instanceof Error) {
+                    router.navigate([Routers.ERROR]);
+                }
+            })
+        );
         this.tripInfo = toSignal(tripInfo$, { initialValue: null });
 
         const tripSchedule$ = this.store.select(selectTripSchedule);
@@ -61,12 +83,19 @@ export class TripComponent implements OnInit {
 
         const selectedSeat$ = this.store.select(selectSelectedSeat);
         this.selectedSeat = toSignal(selectedSeat$, { initialValue: null });
+
+        const userRole$ = this.store.select(selectUserRole);
+        this.userRole = toSignal(userRole$, { initialValue: null });
     }
 
     public ngOnInit(): void {
         this.rideIdParams = +this.route.snapshot.params['rideId'];
         this.fromParams = +this.route.snapshot.queryParams['from'];
         this.toParams = +this.route.snapshot.queryParams['to'];
+
+        if (!this.rideIdParams || !this.fromParams || !this.toParams) {
+            this.router.navigate([Routers.ROOT]);
+        }
 
         if (this.rideIdParams) {
             this.store.dispatch(
@@ -85,7 +114,7 @@ export class TripComponent implements OnInit {
 
     public handleOrdering(): void {
         const seat = this.selectedSeat()?.seatInTrain;
-        if (seat) {
+        if (seat && this.userRole()) {
             this.store.dispatch(
                 AppTripActions.orderingSeat({
                     rideId: this.rideIdParams,
@@ -94,8 +123,11 @@ export class TripComponent implements OnInit {
                     seat,
                 })
             );
+        } else {
+            this.router.navigate([Routers.SIGNIN]);
         }
     }
+
     public handleClearSelectedSeat(): void {
         this.store.dispatch(AppTripActions.clearSelectedSeat());
     }

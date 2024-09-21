@@ -27,15 +27,11 @@
         flex: 1;
     }
 
-    .calendar-input {
-        width: 100%;
-    }
-
     .search-btn {
         width: 100%;
     }
 
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 1199px) {
         .search-form {
             flex-direction: column;
         }
@@ -52,11 +48,7 @@
         }
     }
 
-    @media (max-width: 768px) {
-        .search-form {
-            flex-direction: column;
-        }
-
+    @media (max-width: 767px) {
         .search-inputs {
             flex-direction: column;
             width: 100%;

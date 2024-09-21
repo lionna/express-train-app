@@ -3,13 +3,15 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
-import { endWith, exhaustMap, map, startWith, tap } from 'rxjs';
+import { endWith, exhaustMap, map, of, startWith, tap } from 'rxjs';
 
 import { AuthService } from '../../auth/services/auth-service.service';
+import { LocalStorageFields } from '../../core/models/enums/constants';
 import { Routers } from '../../core/models/enums/routers';
+import { UserRole } from '../../core/models/user/user.model';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 import { AppConfigActions } from '../actions/app-config.actions';
 import { AppUserActions } from '../actions/app-user.actions';
-import { UserRole } from '../models/app-user-state.model';
 import { selectToken } from '../selectors/app-user.selector';
 
 @Injectable()
@@ -18,7 +20,8 @@ export class AppUserEffects {
     constructor(
         private actions$: Actions,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private localStorageService: LocalStorageService
     ) {}
 
     logIn$ = createEffect(() =>
@@ -28,6 +31,12 @@ export class AppUserEffects {
             exhaustMap(() => {
                 return this.authService.getUserProfile().pipe(
                     map(({ email, name, role }) => {
+                        const btoaEmail = btoa(LocalStorageFields.EMAIL as string);
+                        const btoaRole = btoa(LocalStorageFields.ROLE as string);
+
+                        this.localStorageService.setItem(btoaEmail, btoa(email));
+                        this.localStorageService.setItem(btoaRole, btoa(role));
+
                         return AppUserActions.updateUserData({ email, name, role: role as UserRole });
                     }),
                     startWith(AppConfigActions.setVisibleLoader()),
@@ -44,11 +53,16 @@ export class AppUserEffects {
             concatLatestFrom(() => this.store.select(selectToken)),
 
             exhaustMap(([, token]) => {
-                return this.authService.logOut(token ?? '').pipe(
-                    map(() => {
-                        return AppUserActions.logOutSuccess();
-                    })
-                );
+                return this.authService.logOut(token ?? '').pipe(map(() => AppUserActions.logOutDeleteToken()));
+            })
+        )
+    );
+
+    logOutDeleteToken$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppUserActions.logOutDeleteToken),
+            exhaustMap(() => {
+                return of(AppUserActions.logOutSuccess());
             })
         )
     );

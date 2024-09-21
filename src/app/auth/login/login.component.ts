@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -10,6 +10,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { LocalStorageFields, Schemes } from '../../core/models/enums/constants';
@@ -40,10 +41,16 @@ import { LoginFormService } from '../services/login-form.service';
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
     private store = inject(Store);
 
     public colorScheme!: Signal<string>;
+    public disableForm: boolean = false;
+    public isClicked: boolean = false;
+    private userTypeSubscription!: Subscription;
+    private loginSubscription!: Subscription;
+    private updating: boolean = false;
+
     constructor(
         private loginFormService: LoginFormService,
         private errorMessageService: ErrorMessageService,
@@ -62,8 +69,45 @@ export class LoginComponent {
     public get fields() {
         return AuthFormFields;
     }
+    ngOnInit() {
+        this.subscribeToUserType();
+        this.subscribeToLoginChanges();
+    }
+    private subscribeToUserType(): void {
+        const repeatPasswordControl = this.form.get(this.fields.PASSWORD);
+        if (repeatPasswordControl) {
+            this.userTypeSubscription = repeatPasswordControl.valueChanges.subscribe(() => {
+                if (!this.updating) {
+                    this.updating = true;
+                    this.form.get(this.fields.LOGIN)?.updateValueAndValidity();
+                    this.updating = false;
+                }
+            });
+        }
+    }
 
+    private subscribeToLoginChanges(): void {
+        const loginControl = this.form.get(this.fields.LOGIN);
+        if (loginControl) {
+            this.loginSubscription = loginControl.valueChanges.subscribe(() => {
+                if (!this.updating) {
+                    this.updating = true;
+                    this.form.get(this.fields.PASSWORD)?.updateValueAndValidity();
+                    this.updating = false;
+                }
+            });
+        }
+    }
+    ngOnDestroy() {
+        if (this.userTypeSubscription) {
+            this.userTypeSubscription.unsubscribe();
+        }
+        if (this.loginSubscription) {
+            this.loginSubscription.unsubscribe();
+        }
+    }
     public handleSubmit(): void {
+        this.isClicked = true;
         if (!this.form.valid) {
             this.loginFormService.markFormDirty(this.form);
             return;
@@ -72,7 +116,7 @@ export class LoginComponent {
         const login = this.form.get([this.fields.LOGIN])?.value;
 
         const password = this.form.get([this.fields.PASSWORD])?.value;
-
+        this.disableForm = true;
         this.httpService
             .post<SignInSuccessResponse | SignInErrorResponse>({
                 url: environment.apiSignIn,
@@ -83,22 +127,29 @@ export class LoginComponent {
             })
             .subscribe({
                 next: (response) => {
+                    this.disableForm = false;
                     if ('token' in response) {
                         console.log('Login successful:', response.token);
                         this.localStorageService.setItem(LocalStorageFields.TOKEN, response.token);
+
                         this.router.navigate([Routers.ROOT]);
+                        this.form.reset();
                         this.store.dispatch(AppUserActions.logIn({ email: login, token: response.token }));
                     } else if ('error' in response) {
                         console.error('Login failed:', response.error.message);
-                        // this.handleLoginError(response.error);
                     }
+                    this.disableForm = false;
                 },
                 error: (error) => {
-                    console.error('Unexpected error:', error);
+                    this.disableForm = false;
+                    if (error?.reason === 'userNotFound') {
+                        this.form.get([this.fields.LOGIN])?.setErrors({ userNotFound: true });
+                        this.form.get([this.fields.PASSWORD])?.setErrors({ userNotFound: true });
+                        return;
+                    }
+                    console.error('handleSubmit', error);
                 },
             });
-        // this.store.dispatch(Actions.login({ login, password }));
-        // this.form.reset();
     }
 
     public handleLoginErrorMessages(errors: ValidationErrors | null): string[] {
@@ -107,5 +158,9 @@ export class LoginComponent {
 
     public handlePasswordErrorMessages(errors: ValidationErrors | null): string[] {
         return this.errorMessageService.getPasswordErrorMessages(errors);
+    }
+
+    public get disabledSubmitButton(): boolean {
+        return !this.form.valid || this.disableForm;
     }
 }
