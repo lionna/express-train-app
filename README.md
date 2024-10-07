@@ -1,4 +1,9 @@
 # Express-train-app
+Link: https://d1bvzeb0ffhcce.cloudfront.net/
+
+- **User:** Administrator
+- **Email:** `admin@admin.com`
+- **Password:** `my-password`
 
 ## Documentation
 
